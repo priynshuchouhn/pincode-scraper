@@ -7,15 +7,8 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const startPincode = process.env.StartPincode;
+const endPincode = process.env.endPincode;
 
-app.get('/start', async (req, res) => {
-    try {
-        await main();
-        res.send("Process started successfully!");
-    } catch (error) {
-        res.status(500).send("Error starting the process");
-    }
-});
 
 async function main() {
     try {
@@ -25,7 +18,7 @@ async function main() {
 
         let i = startPincode;
         let counter = 0;
-        while (i <= 136200) {
+        while (i <= endPincode) {
             await getPostalData(i);
             i++;
             counter++;
@@ -38,6 +31,7 @@ async function main() {
             }
         }
         console.log("Completed");
+        process.exit(1);
     } catch (error) {
         console.log('Something went wrong:', error);
         throw error;
@@ -82,4 +76,5 @@ async function getPostalData(pincode) {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    main();
 });
