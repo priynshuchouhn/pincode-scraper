@@ -11,6 +11,7 @@ const endPincode = process.env.endPincode;
 
 
 async function main() {
+    console.log('process started')
     try {
         await connectDb();
         console.log("Connection to database is successful");
@@ -74,7 +75,15 @@ async function getPostalData(pincode) {
     }
 }
 
+app.get('/', (req, res) => {
+    res.send(true);
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    setInterval(async ()=>{
+        const res = await axios.get(process.env.URL)
+        console.log(res.data);
+    },60*1000)
     main();
 });
